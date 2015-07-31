@@ -22,6 +22,7 @@ $(function() {
 			create_message(e.data, 'server');
 		};
 		opts.websocket = true;
+		$('.huchat small').text(opts.small);
 	});
 
 	$(window).on("hu-chat-inactive", function() {
@@ -95,13 +96,17 @@ $(function() {
 			create_message(text, 'client');
 
 			$.ajax({
-			  url: opts.elasticsearch_endpoint,
-			  method: "POST",
-			  cache: false,
-			  data: text,
+			  url: opts.elasticsearch_endpoint + "/" + text,
+			  method: "GET",
 			  dataType: 'json',
 			  success: function(result){
-			  	create_message(result.resposta.answer, 'server');
+			  	var r = JSON.parse(result);
+
+			  	create_message(r.response.answer, 'server');
+
+			  	if (r.redirecionar_chat) {
+						$(window).trigger("hu-chat-online");	
+			  	}
 			  },
 			  error: function(result){
 			  	create_message(opts.elastisearch_error, 'server');
@@ -114,8 +119,6 @@ $(function() {
 
 	$('.huchat').on('click', '.start-webchat', function(){
 		$(window).trigger("hu-chat-online");
-
-		$('.huchat small').text(opts.small);
 		return false;
 	});
 });

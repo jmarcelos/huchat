@@ -56,16 +56,15 @@ class Connection
       puts "Encontrei #{total_respostas}"
     elsif total_respostas < 1
       puts "Encontrei #{total_respostas}"
-      resposta = '{"question"=>"", "answer"=>"Desculpa, mas não sei responder sua pergunta, vou perguntar para outro atendente aqui. 1 minuto"}'
-      json = { response: resposta, redirecionar_chat: 'true' }.to_json
+      resposta = {question: '', answer: "Desculpa, mas não sei responder sua pergunta, vou perguntar para outro atendente aqui. 1 minuto"}
+      json = { response: resposta, redirecionar_chat: 'true' }
     else total_respostas > 1
 
       puts "Encontrei #{total_respostas}"
-      resposta = '{"question"=>"", "answer"=>"Poderia ser mais específico por favor, não entendi sua pergunta"}'
+      resposta = {question: "", answer: "Poderia ser mais específico por favor, não entendi sua pergunta"}
       respostas = value["hits"]["hits"]
       respostas.each do |valor|
-        puts "Pergunta: #{valor["_source"]["question"]} com score #{valor["_score"]}"
-
+        puts "Pergunta: #{valor["_source"]["question"]} com score #{valor["_score"]}"q
       end
 
       score = respostas.first['_score']
@@ -75,12 +74,10 @@ class Connection
         resposta = respostas.first['_source']
       end
 
-      json = { response: resposta, redirecionar_chat: 'true' }.to_json
-
+      json = { response: resposta, redirecionar_chat: 'true' }
     end
 
-    json
-
+    json.to_json
   end
 
   def insere_exibicao
