@@ -63,11 +63,18 @@ class Connection
       puts "Encontrei #{total_respostas}"
       resposta = '{"question"=>"", "answer"=>"Poderia ser mais específico por favor, não entendi sua pergunta"}'
       respostas = value["hits"]["hits"]
+      respostas.each do |valor|
+        puts "Pergunta: #{valor["_source"]["question"]} com score #{valor["_score"]}"
+
+      end
+
       score = respostas.first['_score']
-      if score != nil && score >= 0.8
+      puts "Score do primeiro match é de #{score}"
+      if score != nil && score >= 0.5
         puts 'Achei uma resposta que está acima de 80%'
         resposta = respostas.first['_source']
       end
+
       json = { response: resposta, redirecionar_chat: 'true' }.to_json
 
     end
@@ -135,3 +142,4 @@ end
 
 #client.search index: 'huchat', q: 'question:lalalal'
 #client.search index: 'huchat', body: { query: { match: { answer: 'pacote' } } }
+#client.search index: 'huchat', body: { query: { match: { answer: 'quero usar créditos na viagem' } } }

@@ -22,13 +22,13 @@ post '/exibicao' do
   body "Perguntas inseridas com sucesso"
 end
 
-delete 'destruir' do
+delete '/destruir' do
   conexao.destroy
   status 200
   body "Indice destruido com sucesso  "
 end
 
-post 'create' do
+post '/create' do
   conexao.create_conexao
   status 200
   body "Indice criado com sucesso  "
