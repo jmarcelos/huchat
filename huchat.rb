@@ -1,10 +1,10 @@
 require 'sinatra'
 require 'json'
 require 'redis'
-require_relative 'conf'
+#require_relative 'conf'
 require_relative 'conection'
 
-conexao = Connection.new(ELASTICSEARCH_ENDPOINT)
+conexao = Connection.new("https://joao:joao@aws-us-east-1-portal6.dblayer.com:10183")
 
 get '/' do
   erb :index, layout: :bootstrap
@@ -12,9 +12,9 @@ end
 
 get '/admin' do
   erb :admin, layout: :bootstrap
-end     
+end
 
-post '/busca' do
+get '/busca/:busca' do
   content_type :json
 
   resp = params[:busca]

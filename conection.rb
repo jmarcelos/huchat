@@ -52,7 +52,7 @@ class Connection
 
     if total_respostas == 1
       resposta = value["hits"]["hits"].first["_source"]
-      json = { response: resposta, redirecionar_chat: 'true' }.to_json
+      json = { response: resposta, redirecionar_chat: 'false' }.to_json
       puts "Encontrei #{total_respostas}"
     elsif total_respostas < 1
       puts "Encontrei #{total_respostas}"
