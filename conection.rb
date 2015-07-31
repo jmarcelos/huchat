@@ -88,37 +88,37 @@ class Connection
                   type: 'huchat',
                   body: {
                    question: "Como faço para verificar a disponibilidade de data no pacote?",
-                   answer: "Como faço para verificar a disponibilidade de data no pacote?"
+                   answer: "Entre em contato com o Hugo!!!"
                   }
     @client.create index: 'huchat',
                   type: 'huchat',
                   body: {
                    question: "Comprei um pacote! Como faço minha reserva?",
-                   answer: "Comprei um pacote! Como faço minha reserva?"
+                   answer: "Veja o email de confirmação, está lá a resposta`"
                   }
     @client.create index: 'huchat',
                   type: 'huchat',
                   body: {
                    question: "Como faço para verificar o andamento das minhas solicitações?",
-                   answer: "Como faço para verificar o andamento das minhas solicitações?"
+                   answer: "Na área do cliente é possível ver o andamento das solicitoes"
                   }
     @client.create index: 'huchat',
                   type: 'huchat',
                   body: {
                    question: "Desejo cancelar a minha compra, como faço?",
-                   answer: "Desejo cancelar a minha compra, como faço?"
+                   answer: "Vamos liberar os creditos na área do cliente"
                   }
     @client.create index: 'huchat',
                   type: 'huchat',
                   body: {
                    question: "Como faço para usar meus créditos?",
-                   answer: "Como faço para usar meus créditos?"
+                   answer: "Entre no site e torra essa grana"
                   }
     @client.create index: 'huchat',
                   type: 'huchat',
                   body: {
                    question: "Como faço para comprar créditos?",
-                   answer: "Como faço para comprar créditos?"
+                   answer: "Atualmente não vendemos creditos, mas no futuro quem sabe"
                   }
     puts 'Exibição criada com sucesso'
   end

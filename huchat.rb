@@ -19,7 +19,6 @@ get '/busca/:busca' do
 
   resp = params[:busca]
   conexao.search(resp)
-  # { resposta: { question: resp, answer: 'oi oi oi'}}.to_json
 end
 
 get "/info" do
