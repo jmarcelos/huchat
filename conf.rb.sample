@@ -1,0 +1,4 @@
+
+# PROD
+ELASTICSEARCH_ENDPOINT = "https://user:pass@host:port"
+REDIS_ENDOINT = "redis://x:BLA@host:port/"

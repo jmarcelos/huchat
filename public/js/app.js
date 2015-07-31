@@ -6,8 +6,9 @@ $(function() {
 		privacy: 'Fale com um <a href="#" class="start-webchat">consultor</a> agora.',
 		small: 'Essa conversa será gravada para controle.',
 		websocket: false,
-		websocket_endpoint: 'ws://localhost:8080',
-		elasticsearch_endpoint: '/busca'
+		websocket_endpoint: 'ws://localhost:8080/bacon',
+		elasticsearch_endpoint: '/busca',
+		elastisearch_error: 'Ops, nosso robô está viajando.<br> Por favor, <a href="#" class="start-webchat">fale com um consultor</a> ou tente mais tarde.'
 	}
 
 	$(window).on("hu-chat-active", function() {
@@ -18,7 +19,7 @@ $(function() {
 		websocket = new WebSocket(opts.websocket_endpoint);
 		
 		websocket.onmessage = function (e) {
-			create_message(e.data, 'system');
+			create_message(e.data, 'server');
 		};
 		opts.websocket = true;
 	});
@@ -50,11 +51,9 @@ $(function() {
 	var create_message = function(data, autor) {
 		console.log('creates message', data);
 		var message = data.replace(/\n/g,'<br>').replace(/&/g,'e');
+		var new_msg = '<li class="'+autor+'"><span>' + get_date() + '</span> ' + message + '</li>';
 
-		var messages_box = $('.huchat .log ul');
-		var new_msg = '<li class="'+autor+'"><span>' + get_date() + '</span> : ' + message + '</li>';
-
-		messages_box.append(new_msg).scrollTop(9999);
+		$('.huchat .log ul').append(new_msg).scrollTop(9999);
 	};
 
 	var html = '<span class="title">'
@@ -84,13 +83,12 @@ $(function() {
 	});
 
 	// sends message
-	// TODO: ajax [fail/waiting]
 	$('.huchat button').click(function(){
 		var textarea = $('.huchat textarea');
 		if (textarea.val() == '') return;
 		var text = textarea.val();
 
-		// todo: fallback for older browsers, long pooling...
+		// todo: fallback older browsers, long pooling...
 		if (opts.websocket) {
 			websocket.send(text);
 		} else {
@@ -102,19 +100,19 @@ $(function() {
 			  cache: false,
 			  data: text,
 			  dataType: 'json',
-			  complete: function(result){
-			  	// console.log(result);
-			  },
 			  success: function(result){
 			  	create_message(result.resposta.answer, 'server');
 			  },
+			  error: function(result){
+			  	create_message(opts.elastisearch_error, 'server');
+			  }
 			});
 		}
 
 		textarea.val('');
 	});
 
-	$('.start-webchat').click(function(){
+	$('.huchat').on('click', '.start-webchat', function(){
 		$(window).trigger("hu-chat-online");
 
 		$('.huchat small').text(opts.small);
