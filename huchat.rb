@@ -27,3 +27,9 @@ delete 'destruir' do
   status 200
   body "Indice destruido com sucesso  "
 end
+
+post 'create' do
+  conexao.create_conexao
+  status 200
+  body "Indice criado com sucesso  "
+end
