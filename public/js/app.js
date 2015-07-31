@@ -105,6 +105,7 @@ $(function() {
 			  	create_message(r.response.answer, 'server');
 
 			  	if (r.redirecionar_chat) {
+			  		console.log(">>>>>>", r);
 						$(window).trigger("hu-chat-online");	
 			  	}
 			  },

@@ -52,19 +52,19 @@ class Connection
 
     if total_respostas == 1
       resposta = value["hits"]["hits"].first["_source"]
-      json = { response: resposta, redirecionar_chat: 'false' }.to_json
+      json = { response: resposta, redirecionar_chat: false }.to_json
       puts "Encontrei #{total_respostas}"
     elsif total_respostas < 1
       puts "Encontrei #{total_respostas}"
       resposta = {question: '', answer: "Desculpa, mas não sei responder sua pergunta, vou perguntar para outro atendente aqui. 1 minuto"}
-      json = { response: resposta, redirecionar_chat: 'true' }
+      json = { response: resposta, redirecionar_chat: true }
     else total_respostas > 1
 
       puts "Encontrei #{total_respostas}"
       resposta = {question: "", answer: "Poderia ser mais específico por favor, não entendi sua pergunta"}
       respostas = value["hits"]["hits"]
       respostas.each do |valor|
-        puts "Pergunta: #{valor["_source"]["question"]} com score #{valor["_score"]}"q
+        puts "Pergunta: #{valor["_source"]["question"]} com score #{valor["_score"]}"
       end
 
       score = respostas.first['_score']
@@ -74,7 +74,7 @@ class Connection
         resposta = respostas.first['_source']
       end
 
-      json = { response: resposta, redirecionar_chat: 'true' }
+      json = { response: resposta, redirecionar_chat: false }
     end
 
     json.to_json
