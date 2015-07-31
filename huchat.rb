@@ -10,14 +10,20 @@ get '/busca/:busca' do
 end
 
 post '/insert' do
-
   @pergunta = params[:pergunta]
   @resposta = params[:resposta]
   puts "pergunta: #{@pergunta} - resposta #{@resposta}"
   conexao.insere(@pergunta, @resposta)
 end
 
-
 post '/exibicao' do
   conexao.insere_exibicao
+  status 200
+  body "Perguntas inseridas com sucesso"
+end
+
+delete 'destruir' do
+  conexao.destroy
+  status 200
+  body "Indice destruido com sucesso  "
 end

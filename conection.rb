@@ -80,8 +80,8 @@ class Connection
     @client.create index: 'huchat',
                   type: 'huchat',
                   body: {
-                   question: "Como faço para verificar a disponibilidade de data nos pacotes?",
-                   answer: "Como faço para verificar a disponibilidade de data nos pacotes?"
+                   question: "Como faço para verificar a disponibilidade de data no pacote?",
+                   answer: "Como faço para verificar a disponibilidade de data no pacote?"
                   }
     @client.create index: 'huchat',
                   type: 'huchat',
@@ -107,7 +107,18 @@ class Connection
                    question: "Como faço para usar meus créditos?",
                    answer: "Como faço para usar meus créditos?"
                   }
+    @client.create index: 'huchat',
+                  type: 'huchat',
+                  body: {
+                   question: "Como faço para comprar créditos?",
+                   answer: "Como faço para comprar créditos?"
+                  }
     puts 'Exibição criada com sucesso'
+  end
+
+  def destroy
+    puts 'destruindo indice'
+    @client.indices.delete index: 'huchat', id: 1
   end
 
 end
@@ -123,4 +134,4 @@ end
 # client.indices.delete index: 'huchat', id: 1
 
 #client.search index: 'huchat', q: 'question:lalalal'
-#client.search index: 'huchat', body: { query: { match: { answer: 'reps' } } }
+#client.search index: 'huchat', body: { query: { match: { answer: 'pacote' } } }
