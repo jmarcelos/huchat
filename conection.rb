@@ -18,8 +18,8 @@ class Connection
                   mappings: {
                     document: {
                       properties: {
-                              question:  { type: 'string', analyzer: 'keyword' },
-                              answer:  { type: 'string', analyzer: 'keyword' },
+                              question:  { type: 'string' },
+                              answer:  { type: 'string'},
 
                       }
                     }
@@ -42,24 +42,85 @@ class Connection
 
   def search(pergunta)
     puts "buscando #{pergunta}"
+    @client.search index:'huchat', body: { query: { match: { answer: '#{pergunta}' } }}
     value = @client.search index: 'huchat', q: "question:#{pergunta}"
-    json = { response: value["hits"]["hits"].first["_source"] }.to_json
+    trata_resposta(value)
+  end
+
+  def trata_resposta(value)
+    total_respostas = value["hits"]["total"]
+
+    if total_respostas == 1
+      resposta = value["hits"]["hits"].first["_source"]
+      json = { response: resposta, redirecionar_chat: 'true' }.to_json
+      puts "Encontrei #{total_respostas}"
+    elsif total_respostas < 1
+      puts "Encontrei #{total_respostas}"
+      resposta = '{"question"=>"", "answer"=>"Desculpa, mas não sei responder sua pergunta, vou perguntar para outro atendente aqui. 1 minuto"}'
+      json = { response: resposta, redirecionar_chat: 'true' }.to_json
+    else total_respostas > 1
+
+      puts "Encontrei #{total_respostas}"
+      resposta = '{"question"=>"", "answer"=>"Poderia ser mais específico por favor, não entendi sua pergunta"}'
+      respostas = value["hits"]["hits"]
+      score = respostas.first['_score']
+      if score != nil && score >= 0.8
+        puts 'Achei uma resposta que está acima de 80%'
+        resposta = respostas.first['_source']
+      end
+      json = { response: resposta, redirecionar_chat: 'true' }.to_json
+
+    end
+
+    json
+
+  end
+
+  def insere_exibicao
+    @client.create index: 'huchat',
+                  type: 'huchat',
+                  body: {
+                   question: "Como faço para verificar a disponibilidade de data nos pacotes?",
+                   answer: "Como faço para verificar a disponibilidade de data nos pacotes?"
+                  }
+    @client.create index: 'huchat',
+                  type: 'huchat',
+                  body: {
+                   question: "Comprei um pacote! Como faço minha reserva?",
+                   answer: "Comprei um pacote! Como faço minha reserva?"
+                  }
+    @client.create index: 'huchat',
+                  type: 'huchat',
+                  body: {
+                   question: "Como faço para verificar o andamento das minhas solicitações?",
+                   answer: "Como faço para verificar o andamento das minhas solicitações?"
+                  }
+    @client.create index: 'huchat',
+                  type: 'huchat',
+                  body: {
+                   question: "Desejo cancelar a minha compra, como faço?",
+                   answer: "Desejo cancelar a minha compra, como faço?"
+                  }
+    @client.create index: 'huchat',
+                  type: 'huchat',
+                  body: {
+                   question: "Como faço para usar meus créditos?",
+                   answer: "Como faço para usar meus créditos?"
+                  }
+    puts 'Exibição criada com sucesso'
   end
 
 end
 
+
+#client.search index:'huchat', body: { query: { match: { answer: 'Desejo cancelar a minha compra, como faço?' } }}
+
 #client = Elasticsearch::Client.new url: 'https://joao:joao@aws-us-east-1-portal6.dblayer.com:10183'
 #client = Elasticsearch::Client.new url: 'http://localhost:9200'
 
-#curl -XPUT "http://localhost:9200/movies/movie/1" -d'{"title": "The Godfather","director": "Francis Ford Coppola","year": 1972,"genres": ["Crime", "Drama"]}'
-
 #curl -XPUT "http://localhost:9200/huchat/huchat/1" -d'{"question": "Como marcar minha viagem","answer": "vai estudar"}'
-# client.create index: 'huchat',
-#               type: 'huchat',
-#               body: {
-#                question: "lalalal",
-#                answer: "resposta"
-#               }
+#
+# client.indices.delete index: 'huchat', id: 1
 
 #client.search index: 'huchat', q: 'question:lalalal'
 #client.search index: 'huchat', body: { query: { match: { answer: 'reps' } } }

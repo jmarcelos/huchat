@@ -18,28 +18,6 @@ post '/insert' do
 end
 
 
-
-
-# class Perguntas
-#   include Elasticsearch::Model
-#   include Elasticsearch::Model::Callbacks
-#
-#   @@pergunta
-#   @@resposta
-#
-#   def search(query)
-#     __elasticsearch__.search(
-#       {
-#         query: {
-#           multi_match: {
-#             query: query,
-#             fields: ['title^10', 'text']
-#           }
-#         }
-#       }
-#     )
-#   end
-#
-#   def
-#
-# end
+post '/exibicao' do
+  conexao.insere_exibicao
+end
