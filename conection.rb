@@ -3,14 +3,15 @@ require 'elasticsearch/model'
 
 class Connection
 
+
   def initialize(conexao='http://localhost:9200')
     @client = Elasticsearch::Client.new url: conexao
     self.create_conexao
     puts "conexao estabelecida"
   end
 
-  def create_conexao()
-    unless client.indices.exists  index: 'huchat'
+  def create_conexao
+    unless @client.indices.exists  index: 'huchat'
       puts "criando indice"
       @client.indices.create index: 'huchat', type: 'huchat',
                 body: {
@@ -40,12 +41,12 @@ class Connection
   end
 
   def search(pergunta)
+    puts "buscando #{pergunta}"
     value = @client.search index: 'huchat', q: "question:#{pergunta}"
-    value["hits"]["hits"].first["_source"]
+    json = { response: value["hits"]["hits"].first["_source"] }.to_json
   end
 
 end
-
 
 #client = Elasticsearch::Client.new url: 'https://joao:joao@aws-us-east-1-portal6.dblayer.com:10183'
 #client = Elasticsearch::Client.new url: 'http://localhost:9200'

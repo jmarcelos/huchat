@@ -1,56 +1,7 @@
 require 'sinatra'
-#require 'conection.rb'
-require 'elasticsearch'
-require 'elasticsearch/model'
+require_relative "conection"
 
-class Connection
-
-
-  def initialize(conexao='http://localhost:9200')
-    @client = Elasticsearch::Client.new url: conexao
-    self.create_conexao
-    puts "conexao estabelecida"
-  end
-
-  def create_conexao
-    unless @client.indices.exists  index: 'huchat'
-      puts "criando indice"
-      @client.indices.create index: 'huchat', type: 'huchat',
-                body: {
-                  mappings: {
-                    document: {
-                      properties: {
-                              question:  { type: 'string', analyzer: 'keyword' },
-                              answer:  { type: 'string', analyzer: 'keyword' },
-
-                      }
-                    }
-                  }
-                }
-      end
-  end
-
-  def insere(pergunta, resposta)
-
-    @client.create index: 'huchat',
-                  type: 'huchat',
-                  body: {
-                   question: pergunta,
-                   answer: resposta
-                  }
-    puts "inserido com sucesso"
-
-  end
-
-  def search(pergunta)
-    puts "buscando #{pergunta}"
-    value = @client.search index: 'huchat', q: "question:#{pergunta}"
-    json = { response: value["hits"]["hits"].first["_source"] }.to_json
-  end
-
-end
-
-conexao = Connection.new
+conexao = Connection.new "https://joao:joao@aws-us-east-1-portal6.dblayer.com:10183"
 
 get '/busca/:busca' do
 
