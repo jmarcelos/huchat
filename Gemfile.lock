@@ -1,6 +1,13 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    elasticsearch-transport (1.0.12)
+      faraday
+      multi_json
+    faraday (0.9.1)
+      multipart-post (>= 1.2, < 3)
+    multi_json (1.11.2)
+    multipart-post (2.0.0)
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
@@ -14,6 +21,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  elasticsearch-transport
   sinatra
 
 BUNDLED WITH
